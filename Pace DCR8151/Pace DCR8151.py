@@ -5288,7 +5288,8 @@ def runTest():
                         comparassion_result = NOS_API.compare_pictures("Resolution_Right_Place_1080_ref", "Resolution_Right_Place", "[Resolution_Right_Place_1080]")
                         comparassion_result_1 = NOS_API.compare_pictures("Resolution_Right_Place_1080_Black_ref", "Resolution_Right_Place", "[Resolution_Right_Place_1080]")
                         comparassion_result_2 = NOS_API.compare_pictures("Resolution_Right_Place_1080_ref2", "Resolution_Right_Place", "[Resolution_Right_Place_1080]")
-                        if not(comparassion_result >= 80 or comparassion_result_1 >= 80 or comparassion_result_2 >= 80):
+                        comparassion_result_3 = NOS_API.compare_pictures("Resolution_Right_Place_1080_ref3", "Resolution_Right_Place", "[Resolution_Right_Place_1080]")
+                        if not(comparassion_result >= 60 or comparassion_result_1 >= 80 or comparassion_result_2 >= 80 or comparassion_result_3 >= 80):
                             TEST_CREATION_API.send_ir_rc_command("[EXIT_ZON_BOX_NEW]")
                             time.sleep(5)
                             TEST_CREATION_API.send_ir_rc_command("[RESOLUTION_SETTINGS_SLOW]")
@@ -5343,7 +5344,8 @@ def runTest():
                             comparassion_result = NOS_API.compare_pictures("Resolution_Right_Place_1080_ref", "Resolution_Right_Place_1", "[Resolution_Right_Place_720]")
                             comparassion_result_1 = NOS_API.compare_pictures("Resolution_Right_Place_1080_Black_ref", "Resolution_Right_Place", "[Resolution_Right_Place_1080]")
                             comparassion_result_2 = NOS_API.compare_pictures("Resolution_Right_Place_1080_ref2", "Resolution_Right_Place", "[Resolution_Right_Place_1080]")
-                            if not(comparassion_result >= 80 or comparassion_result_1 >= 80 or comparassion_result_2 >= 80):
+                            comparassion_result_3 = NOS_API.compare_pictures("Resolution_Right_Place_1080_ref3", "Resolution_Right_Place", "[Resolution_Right_Place_1080]")
+                            if not(comparassion_result >= 60 or comparassion_result_1 >= 80 or comparassion_result_2 >= 80 or comparassion_result_3 >= 80):
                                 NOS_API.set_error_message("Navegação")
                                 TEST_CREATION_API.write_log_to_file("Doesn't Navigate to right place")
                                 NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.navigation_error_code \
@@ -8849,24 +8851,108 @@ def runTest():
                                                     report_file)
                                                 
                                                 return
-                                            TEST_CREATION_API.send_ir_rc_command("[EXIT_ZON_BOX_NEW]")
-                                            TEST_CREATION_API.send_ir_rc_command("[PLAY_CONTENT_FROM_HDD]")
-                                            if not(NOS_API.grab_picture("HDD_menu")):
-                                                if (Repeat == 0):
-                                                    Repeat = Repeat + 1
-                                                    if(NOS_API.test_cases_results_info.DidUpgrade == 1):
-                                                        NOS_API.test_cases_results_info.DidUpgrade = 5
+                                            compare_result = NOS_API.wait_for_multiple_pictures(["Recording_Active_ref", "Recording_Active_new_ref"], 30, ["[Menu_Arquivo]", "[Menu_Arquivo]"], [80, 80])
+                                            if (compare_result == -1 or compare_result == -2):
+                                                if(TEST_CREATION_API.compare_pictures("No_Content_ref", "HDD_menu", "[No_Content]") or TEST_CREATION_API.compare_pictures("No_content_ref2", "HDD_menu", "[No_Content]")):
+                                                    NOS_API.test_cases_results_info.recording_started = False
+                                                    TEST_CREATION_API.write_log_to_file("Recording is not started")
+                                                    NOS_API.update_test_slot_comment("Error code: " + NOS_API.test_cases_results_info.recording_error_code \
+                                                                                                + "; Error message: " + NOS_API.test_cases_results_info.recording_error_message)
+                                                    error_codes = NOS_API.test_cases_results_info.recording_error_code
+                                                    error_messages = NOS_API.test_cases_results_info.recording_error_message
+                                                    NOS_API.set_error_message("HDD")
+                                                    NOS_API.add_test_case_result_to_file_report(
+                                                                    test_result,
+                                                                    "- - - - - - - - - - - - - - - - - - - -",
+                                                                    "- - - - - - - - - - - - - - - - - - - -",
+                                                                    error_codes,
+                                                                    error_messages)
+                                                    end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S') 
+                                                    report_file = ""
+                                                    if (test_result != "PASS"):
+                                                        report_file = NOS_API.create_test_case_log_file(
+                                                                        NOS_API.test_cases_results_info.s_n_using_barcode,
+                                                                        NOS_API.test_cases_results_info.nos_sap_number,
+                                                                        NOS_API.test_cases_results_info.cas_id_using_barcode,
+                                                                        NOS_API.test_cases_results_info.mac_using_barcode,
+                                                                        end_time)
+                                                        NOS_API.upload_file_report(report_file)
+                                                        NOS_API.test_cases_results_info.isTestOK = False
+                                                    
+                                                    
+                                                    ## Update test result
+                                                    TEST_CREATION_API.update_test_result(test_result)
+                                                    
+                                                    ## Return DUT to initial state and de-initialize grabber device
+                                                    NOS_API.deinitialize()
+                                                    
+                                                    NOS_API.send_report_over_mqtt_test_plan(
+                                                        test_result,
+                                                        end_time,
+                                                        error_codes,
+                                                        report_file)
+                                                    
+                                                    return
+                                                TEST_CREATION_API.send_ir_rc_command("[EXIT_ZON_BOX_NEW]")
+                                                TEST_CREATION_API.send_ir_rc_command("[PLAY_CONTENT_FROM_HDD]")
+                                                if not(NOS_API.grab_picture("HDD_menu")):
+                                                    if (Repeat == 0):
+                                                        Repeat = Repeat + 1
+                                                        if(NOS_API.test_cases_results_info.DidUpgrade == 1):
+                                                            NOS_API.test_cases_results_info.DidUpgrade = 5
+                                                        else:
+                                                            NOS_API.test_cases_results_info.DidUpgrade = 4
+                                                        TEST_CREATION_API.write_log_to_file("STB lost Signal.Possible Reboot. Line 5371.")
+                                                        continue
                                                     else:
-                                                        NOS_API.test_cases_results_info.DidUpgrade = 4
-                                                    TEST_CREATION_API.write_log_to_file("STB lost Signal.Possible Reboot. Line 5371.")
-                                                    continue
+                                                        TEST_CREATION_API.write_log_to_file("STB lost Signal.Possible Reboot.")
+                                                        NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.reboot_error_code \
+                                                                                + "; Error message: " + NOS_API.test_cases_results_info.reboot_error_message)
+                                                        NOS_API.set_error_message("Reboot")
+                                                        error_codes = NOS_API.test_cases_results_info.reboot_error_code
+                                                        error_messages = NOS_API.test_cases_results_info.reboot_error_message
+                                                        
+                                                        NOS_API.add_test_case_result_to_file_report(
+                                                                    test_result,
+                                                                    "- - - - - - - - - - - - - - - - - - - -",
+                                                                    "- - - - - - - - - - - - - - - - - - - -",
+                                                                    error_codes,
+                                                                    error_messages)
+                                        
+                                                        end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S') 
+                                                        report_file = NOS_API.create_test_case_log_file(
+                                                                        NOS_API.test_cases_results_info.s_n_using_barcode,
+                                                                        NOS_API.test_cases_results_info.nos_sap_number,
+                                                                        NOS_API.test_cases_results_info.cas_id_using_barcode,
+                                                                        NOS_API.test_cases_results_info.mac_using_barcode,
+                                                                        end_time)
+                                                    
+                                                        NOS_API.upload_file_report(report_file)
+                                                        NOS_API.test_cases_results_info.isTestOK = False
+                                                                                
+                                                        NOS_API.send_report_over_mqtt_test_plan(
+                                                                test_result,
+                                                                end_time,
+                                                                error_codes,
+                                                                report_file)
+                                                                
+                                                        ## Update test result
+                                                        TEST_CREATION_API.update_test_result(test_result)
+                                                        
+                                                        ## Return DUT to initial state and de-initialize grabber device
+                                                        NOS_API.deinitialize()
+                                                        
+                                                        return
+                                                
+                                                if(TEST_CREATION_API.compare_pictures("HDD_Menu_ref", "HDD_menu", "[HDD_Menu]")):
+                                                    TEST_CREATION_API.send_ir_rc_command("[OK]")
                                                 else:
-                                                    TEST_CREATION_API.write_log_to_file("STB lost Signal.Possible Reboot.")
-                                                    NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.reboot_error_code \
-                                                                            + "; Error message: " + NOS_API.test_cases_results_info.reboot_error_message)
-                                                    NOS_API.set_error_message("Reboot")
-                                                    error_codes = NOS_API.test_cases_results_info.reboot_error_code
-                                                    error_messages = NOS_API.test_cases_results_info.reboot_error_message
+                                                    TEST_CREATION_API.write_log_to_file("Couldn't navigate to HDD Menu")
+                                                    NOS_API.set_error_message("Navegação")
+                                                    NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.navigation_error_code \
+                                                                                            + "; Error message: " + NOS_API.test_cases_results_info.navigation_error_message) 
+                                                    error_codes = NOS_API.test_cases_results_info.navigation_error_code
+                                                    error_messages = NOS_API.test_cases_results_info.navigation_error_message                    
                                                     
                                                     NOS_API.add_test_case_result_to_file_report(
                                                                 test_result,
@@ -8874,73 +8960,173 @@ def runTest():
                                                                 "- - - - - - - - - - - - - - - - - - - -",
                                                                 error_codes,
                                                                 error_messages)
-                                    
-                                                    end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S') 
+                                                    
+                                                    end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                                                    report_file = ""    
+                                                    
                                                     report_file = NOS_API.create_test_case_log_file(
                                                                     NOS_API.test_cases_results_info.s_n_using_barcode,
                                                                     NOS_API.test_cases_results_info.nos_sap_number,
                                                                     NOS_API.test_cases_results_info.cas_id_using_barcode,
                                                                     NOS_API.test_cases_results_info.mac_using_barcode,
                                                                     end_time)
-                                                
                                                     NOS_API.upload_file_report(report_file)
-                                                    NOS_API.test_cases_results_info.isTestOK = False
-                                                                            
+                                                    
                                                     NOS_API.send_report_over_mqtt_test_plan(
                                                             test_result,
                                                             end_time,
                                                             error_codes,
                                                             report_file)
-                                                            
+            
                                                     ## Update test result
                                                     TEST_CREATION_API.update_test_result(test_result)
-                                                    
+            
                                                     ## Return DUT to initial state and de-initialize grabber device
                                                     NOS_API.deinitialize()
-                                                    
                                                     return
-                                            
-                                            if(TEST_CREATION_API.compare_pictures("HDD_Menu_ref", "HDD_menu", "[HDD_Menu]")):
-                                                TEST_CREATION_API.send_ir_rc_command("[OK]")
                                             else:
-                                                TEST_CREATION_API.write_log_to_file("Couldn't navigate to HDD Menu")
-                                                NOS_API.set_error_message("Navegação")
-                                                NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.navigation_error_code \
-                                                                                        + "; Error message: " + NOS_API.test_cases_results_info.navigation_error_message) 
-                                                error_codes = NOS_API.test_cases_results_info.navigation_error_code
-                                                error_messages = NOS_API.test_cases_results_info.navigation_error_message                    
-                                                
-                                                NOS_API.add_test_case_result_to_file_report(
-                                                            test_result,
-                                                            "- - - - - - - - - - - - - - - - - - - -",
-                                                            "- - - - - - - - - - - - - - - - - - - -",
-                                                            error_codes,
-                                                            error_messages)
-                                                
-                                                end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                                                report_file = ""    
-                                                
-                                                report_file = NOS_API.create_test_case_log_file(
-                                                                NOS_API.test_cases_results_info.s_n_using_barcode,
-                                                                NOS_API.test_cases_results_info.nos_sap_number,
-                                                                NOS_API.test_cases_results_info.cas_id_using_barcode,
-                                                                NOS_API.test_cases_results_info.mac_using_barcode,
-                                                                end_time)
-                                                NOS_API.upload_file_report(report_file)
-                                                
-                                                NOS_API.send_report_over_mqtt_test_plan(
-                                                        test_result,
-                                                        end_time,
-                                                        error_codes,
-                                                        report_file)
-        
-                                                ## Update test result
-                                                TEST_CREATION_API.update_test_result(test_result)
-        
-                                                ## Return DUT to initial state and de-initialize grabber device
-                                                NOS_API.deinitialize()
-                                                return
+                                                TEST_CREATION_API.send_ir_rc_command("[OK]")
+                                                if not(NOS_API.grab_picture("HDD_menu_1")):
+                                                    if (Repeat == 0):
+                                                        Repeat = Repeat + 1
+                                                        if(NOS_API.test_cases_results_info.DidUpgrade == 1):
+                                                            NOS_API.test_cases_results_info.DidUpgrade = 5
+                                                        else:
+                                                            NOS_API.test_cases_results_info.DidUpgrade = 4
+                                                        TEST_CREATION_API.write_log_to_file("STB lost Signal.Possible Reboot. Line 7087.")
+                                                        continue
+                                                    else:
+                                                        TEST_CREATION_API.write_log_to_file("STB lost Signal.Possible Reboot.")
+                                                        NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.reboot_error_code \
+                                                                                + "; Error message: " + NOS_API.test_cases_results_info.reboot_error_message)
+                                                        NOS_API.set_error_message("Reboot")
+                                                        error_codes = NOS_API.test_cases_results_info.reboot_error_code
+                                                        error_messages = NOS_API.test_cases_results_info.reboot_error_message
+                                                        
+                                                        NOS_API.add_test_case_result_to_file_report(
+                                                                    test_result,
+                                                                    "- - - - - - - - - - - - - - - - - - - -",
+                                                                    "- - - - - - - - - - - - - - - - - - - -",
+                                                                    error_codes,
+                                                                    error_messages)
                                         
+                                                        end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S') 
+                                                        report_file = NOS_API.create_test_case_log_file(
+                                                                        NOS_API.test_cases_results_info.s_n_using_barcode,
+                                                                        NOS_API.test_cases_results_info.nos_sap_number,
+                                                                        NOS_API.test_cases_results_info.cas_id_using_barcode,
+                                                                        NOS_API.test_cases_results_info.mac_using_barcode,
+                                                                        end_time)
+                                                    
+                                                        NOS_API.upload_file_report(report_file)
+                                                        NOS_API.test_cases_results_info.isTestOK = False
+                                                                                
+                                                        NOS_API.send_report_over_mqtt_test_plan(
+                                                                test_result,
+                                                                end_time,
+                                                                error_codes,
+                                                                report_file)
+                                                                
+                                                        ## Update test result
+                                                        TEST_CREATION_API.update_test_result(test_result)
+                                                        
+                                                        ## Return DUT to initial state and de-initialize grabber device
+                                                        NOS_API.deinitialize()
+                                                        
+                                                        return
+            
+                                                if(TEST_CREATION_API.compare_pictures("HDD_Menu_ref", "HDD_menu_1", "[HDD_Menu]") or TEST_CREATION_API.compare_pictures("HDD_Menu1_ref", "HDD_menu_1", "[HDD_Menu]")):
+                                                    TEST_CREATION_API.send_ir_rc_command("[OK]")
+                                                    if not(NOS_API.grab_picture("HDD_menu_2")):
+                                                        if (Repeat == 0):
+                                                            Repeat = Repeat + 1
+                                                            if(NOS_API.test_cases_results_info.DidUpgrade == 1):
+                                                                NOS_API.test_cases_results_info.DidUpgrade = 5
+                                                            else:
+                                                                NOS_API.test_cases_results_info.DidUpgrade = 4
+                                                            TEST_CREATION_API.write_log_to_file("STB lost Signal.Possible Reboot. Line 7134.")
+                                                            continue
+                                                        else:
+                                                            TEST_CREATION_API.write_log_to_file("STB lost Signal.Possible Reboot.")
+                                                            NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.reboot_error_code \
+                                                                                    + "; Error message: " + NOS_API.test_cases_results_info.reboot_error_message)
+                                                            NOS_API.set_error_message("Reboot")
+                                                            error_codes = NOS_API.test_cases_results_info.reboot_error_code
+                                                            error_messages = NOS_API.test_cases_results_info.reboot_error_message
+                                                            
+                                                            NOS_API.add_test_case_result_to_file_report(
+                                                                        test_result,
+                                                                        "- - - - - - - - - - - - - - - - - - - -",
+                                                                        "- - - - - - - - - - - - - - - - - - - -",
+                                                                        error_codes,
+                                                                        error_messages)
+                                            
+                                                            end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S') 
+                                                            report_file = NOS_API.create_test_case_log_file(
+                                                                            NOS_API.test_cases_results_info.s_n_using_barcode,
+                                                                            NOS_API.test_cases_results_info.nos_sap_number,
+                                                                            NOS_API.test_cases_results_info.cas_id_using_barcode,
+                                                                            NOS_API.test_cases_results_info.mac_using_barcode,
+                                                                            end_time)
+                                                        
+                                                            NOS_API.upload_file_report(report_file)
+                                                            NOS_API.test_cases_results_info.isTestOK = False
+                                                                                    
+                                                            NOS_API.send_report_over_mqtt_test_plan(
+                                                                    test_result,
+                                                                    end_time,
+                                                                    error_codes,
+                                                                    report_file)
+                                                                    
+                                                            ## Update test result
+                                                            TEST_CREATION_API.update_test_result(test_result)
+                                                            
+                                                            ## Return DUT to initial state and de-initialize grabber device
+                                                            NOS_API.deinitialize()
+                                                            
+                                                            return
+            
+                                                    if(TEST_CREATION_API.compare_pictures("HDD_Menu_ref", "HDD_menu_2", "[HDD_Menu]") or TEST_CREATION_API.compare_pictures("HDD_Menu1_ref", "HDD_menu_2", "[HDD_Menu]")):
+                                                        TEST_CREATION_API.write_log_to_file("STB doesn't receive IR commands.")
+                                                        NOS_API.update_test_slot_comment("Error code: " + NOS_API.test_cases_results_info.ir_nok_error_code \
+                                                                                        + "; Error message: " + NOS_API.test_cases_results_info.ir_nok_error_message)
+                                                        NOS_API.set_error_message("IR")
+                                                        error_codes = NOS_API.test_cases_results_info.ir_nok_error_code
+                                                        error_messages = NOS_API.test_cases_results_info.ir_nok_error_message
+                                                        test_result = "FAIL"
+                                                        
+                                                        NOS_API.add_test_case_result_to_file_report(
+                                                                        test_result,
+                                                                        "- - - - - - - - - - - - - - - - - - - -",
+                                                                        "- - - - - - - - - - - - - - - - - - - -",
+                                                                        error_codes,
+                                                                        error_messages)
+                                                        end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S') 
+                                                        report_file = ""
+                                                        if (test_result != "PASS"):
+                                                            report_file = NOS_API.create_test_case_log_file(
+                                                                            NOS_API.test_cases_results_info.s_n_using_barcode,
+                                                                            NOS_API.test_cases_results_info.nos_sap_number,
+                                                                            NOS_API.test_cases_results_info.cas_id_using_barcode,
+                                                                            NOS_API.test_cases_results_info.mac_using_barcode,
+                                                                            end_time)
+                                                            NOS_API.upload_file_report(report_file)
+                                                            NOS_API.test_cases_results_info.isTestOK = False
+                                    
+                                    
+                                                        ## Update test result
+                                                        TEST_CREATION_API.update_test_result(test_result)
+                                                        
+                                                        ## Return DUT to initial state and de-initialize grabber device
+                                                        NOS_API.deinitialize()
+                                                        
+                                                        NOS_API.send_report_over_mqtt_test_plan(
+                                                            test_result,
+                                                            end_time,
+                                                            error_codes,
+                                                            report_file)
+            
+                                                        return
                                         time.sleep(8)
                                         if not (NOS_API.is_signal_present_on_video_source()):
                                             if (Repeat == 0):
@@ -9510,7 +9696,7 @@ def runTest():
                                                     if not(video_result >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or video_result_1 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
                                                         TEST_CREATION_API.send_ir_rc_command("[EXIT_ZON_BOX_NEW]")
                                                         TEST_CREATION_API.send_ir_rc_command("[CH_1]")
-                                                        TEST_CREATION_API.send_ir_rc_command("[Factory_Reset]")
+                                                        TEST_CREATION_API.send_ir_rc_command("[Factory_Reset_Slow]")
                                                         if not(NOS_API.grab_picture("Factory_Reset_1")):
                                                             if (Repeat == 0):
                                                                 Repeat = Repeat + 1
