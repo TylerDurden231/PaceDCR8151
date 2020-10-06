@@ -33,6 +33,12 @@ try:
 except Exception as error_message:
     pass
 
+##Set correct grabber for this TestSlot
+NOS_API.grabber_type()
+
+##Set correct grabber for this TestSlot
+TEST_CREATION_API.grabber_type()
+
 def runTest():
     System_Failure = 0
     Repeat = 0
@@ -262,84 +268,7 @@ def runTest():
                         TEST_CREATION_API.update_test_result(test_result)
                         
                         return
-                
-                ### Power of STB with energenie
-                #if (NOS_API.configure_power_switch_by_inspection()):
-                #    if not(NOS_API.power_off()):
-                #        TEST_CREATION_API.write_log_to_file("Comunication with PowerSwitch Fails")
-                #
-                #        NOS_API.set_error_message("POWER SWITCH")
-                #        NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.power_switch_error_code \
-                #                                            + "; Error message: " + NOS_API.test_cases_results_info.power_switch_error_message)
-                #        error_codes = NOS_API.test_cases_results_info.power_switch_error_code
-                #        error_messages = NOS_API.test_cases_results_info.power_switch_error_message
-                #        ## Return DUT to initial state and de-initialize grabber device
-                #        NOS_API.deinitialize()
-                #        NOS_API.add_test_case_result_to_file_report(
-                #                test_result,
-                #                "- - - - - - - - - - - - - - - - - - - -",
-                #                "- - - - - - - - - - - - - - - - - - - -",
-                #                error_codes,
-                #                error_messages)
-                #    
-                #        end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                #        report_file = NOS_API.create_test_case_log_file(
-                #                    NOS_API.test_cases_results_info.s_n_using_barcode,
-                #                    NOS_API.test_cases_results_info.nos_sap_number,
-                #                    NOS_API.test_cases_results_info.cas_id_using_barcode,
-                #                    NOS_API.test_cases_results_info.mac_using_barcode,
-                #                    end_time)
-                #        NOS_API.upload_file_report(report_file)
-                #        
-                #        NOS_API.send_report_over_mqtt_test_plan(
-                #            test_result,
-                #            end_time,
-                #            error_codes,
-                #            report_file)
-                #        
-                #        ## Update test result
-                #        TEST_CREATION_API.update_test_result(test_result)
-                #        
-                #        return
-                #    
-                #    time.sleep(1)
-                #else:
-                #    TEST_CREATION_API.write_log_to_file("Incorrect test place name")
-                #    
-                #    NOS_API.set_error_message("POWER SWITCH")
-                #    NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.power_switch_error_code \
-                #                                        + "; Error message: " + NOS_API.test_cases_results_info.power_switch_error_message)
-                #    error_codes = NOS_API.test_cases_results_info.power_switch_error_code
-                #    error_messages = NOS_API.test_cases_results_info.power_switch_error_message
-                #    ## Return DUT to initial state and de-initialize grabber device
-                #    NOS_API.deinitialize()
-                #    NOS_API.add_test_case_result_to_file_report(
-                #            test_result,
-                #            "- - - - - - - - - - - - - - - - - - - -",
-                #            "- - - - - - - - - - - - - - - - - - - -",
-                #            error_codes,
-                #            error_messages)
-                #
-                #    end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                #    report_file = NOS_API.create_test_case_log_file(
-                #                NOS_API.test_cases_results_info.s_n_using_barcode,
-                #                NOS_API.test_cases_results_info.nos_sap_number,
-                #                NOS_API.test_cases_results_info.cas_id_using_barcode,
-                #                NOS_API.test_cases_results_info.mac_using_barcode,
-                #                end_time)
-                #    NOS_API.upload_file_report(report_file)
-                #    
-                #    NOS_API.send_report_over_mqtt_test_plan(
-                #        test_result,
-                #        end_time,
-                #        error_codes,
-                #        report_file)
-                #
-                #    ## Update test result
-                #    TEST_CREATION_API.update_test_result(test_result)
-                #    
-                #    return 
-                #
+
                 ## Power on STB with energenie
                 if (NOS_API.configure_power_switch_by_inspection()):
                     if not(NOS_API.power_on()):
@@ -934,12 +863,12 @@ def runTest():
                             if (NOS_API.is_signal_present_on_video_source()):
         
                                 compare_result = NOS_API.wait_for_multiple_pictures(
-                                                                    ["sw_upgrade_loop_3_ref", "sw_update_loop_1_720p", "sw_update_loop_2_720p", "sw_update_loop_2_720p_SD", "sw_update_error_720p_upg_ref", "sw_update_error_720p_eng_ref", "sw_update_error_720p", "Old_Shiffted_Image_ref", "searching_for_sw_1080_old_ref", "Inst_Old_Offset_eng_ref", "Inst_Old_Offset_ref", "UMA_Logo_ref",  "Menu_UMA_1080_ref", "ErrorMessage_ref", "Menu_New_1080_ref", "sd_service_720p_ref1", "sd_service_720p_ref2", "sd_service_ref1", "sd_service_ref2", "hd_channel_ref", "hd_channel_ref1", "no_signal_channel_mode_ref", "no_signal_channel_mode_2_ref", "no_signal_channel_mode_720_ref", "no_signal_channel_mode_2_720_ref", "menu_576_ref", "menu_720_ref", "menu_1080_ref", "No_Channel_1", "error_message_1080_ref", "TermsConditions_ref", "installation_boot_up_ref", "language_installation_mode_ref", "installation_text_installation_mode_ref", "english_installation", "english_termos", "english_language_installation_ref", "installation_boot_up_ref_old", "installation_boot_up_ref_old_1", "Installation_Check_Signal", "Upgrade_OK_ref"],
+                                                                    ["sw_upgrade_loop_3_ref", "sw_update_loop_1_720p", "sw_update_loop_2_720p", "sw_update_loop_2_720p_SD", "sw_update_error_720p_upg_ref", "sw_update_error_720p_eng_ref", "sw_update_error_720p", "Old_Shiffted_Image_ref", "searching_for_sw_1080_old_ref", "Inst_Old_Offset_eng_ref", "Inst_Old_Offset_ref", "UMA_Logo_ref",  "Menu_UMA_1080_ref", "ErrorMessage_ref", "Menu_New_1080_ref", "sd_service_720p_ref1", "sd_service_720p_ref2", "sd_service_720p_ref3", "sd_service_720p_ref4", "sd_service_ref1", "sd_service_ref2", "sd_service_ref3", "hd_channel_ref", "hd_channel_ref1", "hd_channel_ref2", "no_signal_channel_mode_ref", "no_signal_channel_mode_2_ref", "no_signal_channel_mode_720_ref", "no_signal_channel_mode_2_720_ref", "menu_576_ref", "menu_720_ref", "menu_1080_ref", "No_Channel_1", "error_message_1080_ref", "TermsConditions_ref", "installation_boot_up_ref", "installation_boot_up_ref1", "language_installation_mode_ref", "installation_text_installation_mode_ref", "english_installation", "english_termos", "english_language_installation_ref", "installation_boot_up_ref_old", "installation_boot_up_ref_old_1", "Installation_Check_Signal", "Upgrade_OK_ref"],
                                                                     delta_check,
-                                                                    ["[SW_UPDATE_LOOP_3]", "[SW_UPDATE_LOOP_720p]", "[SW_UPDATE_LOOP_720p]", "[SW_UPDATE_LOOP_720p]", "[SW_UPDATE_ERROR_UPG_720p]", "[SW_UPDATE_ERROR_720p]", "[SW_UPDATE_ERROR_720p]", "[Old_Shiffted_Installation]", "[searching_for_sw_1080_ref]", "[Inst_Old_Offset]", "[Inst_Old_Offset]", "[UMA_Logo]", "[Def_UMA_Menu]", "[Menu_Error_Message]", "[Def_Symbol_1080]", "[HALF_SCREEN]", "[HALF_SCREEN]", "[HALF_SCREEN_SD_CH_1080p]", "[HALF_SCREEN_SD_CH_1080p]", "[HALF_SCREEN_HD]", "[HALF_SCREEN_HD]", "[NO_SIGNAL_CHANNEL_MODE]", "[NO_SIGNAL_CHANNEL_MODE]", "[NO_SIGNAL_CHANNEL_MODE_720p]", "[NO_SIGNAL_CHANNEL_MODE_720p]", "[MENU_576]", "[MENU_720]", "[MENU_1080]", "[No_Channel_1]", "[NO_SIGNAL_CHANNEL_MODE]", "[TermsConditions]", "[FTI_AFTER_SW_UPGRADE]", "[LANGUAGE_INSTALLATION_MODE]", "[INSTALLATION_TEXT_FTI]", "[INSTALLATION_ENGLISH]", "[ENGLISH_TERMOS]", "[ENGLISH_INSTALLATION_LANGUAGE]", "[FTI_AFTER_SW_UPGRADE_OLD]", "[FTI_AFTER_SW_UPGRADE_OLD_1]", "[FTI_AFTER_SW_UPGRADE_OLD_2]", "[Inst_Success]"],
-                                                                    [80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 30, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80])
+                                                                    ["[SW_UPDATE_LOOP_3]", "[SW_UPDATE_LOOP_720p]", "[SW_UPDATE_LOOP_720p]", "[SW_UPDATE_LOOP_720p]", "[SW_UPDATE_ERROR_UPG_720p]", "[SW_UPDATE_ERROR_720p]", "[SW_UPDATE_ERROR_720p]", "[Old_Shiffted_Installation]", "[searching_for_sw_1080_ref]", "[Inst_Old_Offset]", "[Inst_Old_Offset]", "[UMA_Logo]", "[Def_UMA_Menu]", "[Menu_Error_Message]", "[Def_Symbol_1080]", "[HALF_SCREEN]", "[HALF_SCREEN]", "[HALF_SCREEN]", "[HALF_SCREEN]", "[HALF_SCREEN_SD_CH_1080p]", "[HALF_SCREEN_SD_CH_1080p]", "[HALF_SCREEN_SD_CH_1080p]", "[HALF_SCREEN_HD]", "[HALF_SCREEN_HD]", "[HALF_SCREEN_HD]", "[NO_SIGNAL_CHANNEL_MODE]", "[NO_SIGNAL_CHANNEL_MODE]", "[NO_SIGNAL_CHANNEL_MODE_720p]", "[NO_SIGNAL_CHANNEL_MODE_720p]", "[MENU_576]", "[MENU_720]", "[MENU_1080]", "[No_Channel_1]", "[NO_SIGNAL_CHANNEL_MODE]", "[TermsConditions]", "[FTI_AFTER_SW_UPGRADE]", "[FTI_AFTER_SW_UPGRADE]", "[LANGUAGE_INSTALLATION_MODE]", "[INSTALLATION_TEXT_FTI]", "[INSTALLATION_ENGLISH]", "[ENGLISH_TERMOS]", "[ENGLISH_INSTALLATION_LANGUAGE]", "[FTI_AFTER_SW_UPGRADE_OLD]", "[FTI_AFTER_SW_UPGRADE_OLD_1]", "[FTI_AFTER_SW_UPGRADE_OLD_2]", "[Inst_Success]"],
+                                                                    [80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 30, 80, 80, 80, NOS_API.thres, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80])
                                         
-                                if(compare_result == 0 or compare_result >= 30):
+                                if(compare_result == 0 or compare_result >= 34):
                                     NOS_API.test_cases_results_info.channel_boot_up_state = False
                                     time.sleep(2)    
                                     #test_result = "PASS"
@@ -969,7 +898,7 @@ def runTest():
                                     test_result = "FAIL"
                                     Repeat = 2
                                     Act = 2
-                                elif(compare_result >= 13 and compare_result < 30 or compare_result >= 1 and compare_result < 4):
+                                elif(compare_result >= 13 and compare_result < 34 or compare_result >= 1 and compare_result < 4):
                                     NOS_API.test_cases_results_info.channel_boot_up_state = True
                                     if(compare_result >= 1 and compare_result < 3):
                                         TEST_CREATION_API.send_ir_rc_command("[EXIT]")
@@ -1597,7 +1526,7 @@ def runTest():
                                                 
                                                 return
                                         comparassion_result = NOS_API.compare_pictures("Resolution_Right_Place_720_ref", "Resolution_Right_Place", "[Resolution_Right_Place_720]")
-                                        if not(comparassion_result >= 80):
+                                        if not(comparassion_result >= NOS_API.thres):
                                             TEST_CREATION_API.send_ir_rc_command("[EXIT_ZON_BOX_NEW]")
                                             TEST_CREATION_API.send_ir_rc_command("[CH_1]")
                                             time.sleep(3)
@@ -1651,7 +1580,7 @@ def runTest():
                                                     
                                                     return
                                             comparassion_result = NOS_API.compare_pictures("Resolution_Right_Place_720_ref", "Resolution_Right_Place_1", "[Resolution_Right_Place_720]")
-                                            if not(comparassion_result >= 80):
+                                            if not(comparassion_result >= NOS_API.thres):
                                                 NOS_API.set_error_message("Navegação")
                                                 TEST_CREATION_API.write_log_to_file("Doesn't Navigate to right place")
                                                 NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.navigation_error_code \
@@ -1740,7 +1669,7 @@ def runTest():
                                                 
                                                 return
                                         comparassion_result = NOS_API.compare_pictures("Resolution_Right_Place_576_ref", "Resolution_Right_Place", "[Resolution_Right_Place_576]")
-                                        if not(comparassion_result >= 80):
+                                        if not(comparassion_result >= NOS_API.thres):
                                             TEST_CREATION_API.send_ir_rc_command("[EXIT_ZON_BOX_NEW]")
                                             TEST_CREATION_API.send_ir_rc_command("[CH_1]")
                                             time.sleep(3)
@@ -1794,7 +1723,7 @@ def runTest():
                                                     
                                                     return
                                             comparassion_result = NOS_API.compare_pictures("Resolution_Right_Place_576_ref", "Resolution_Right_Place_1", "[Resolution_Right_Place_576]")
-                                            if not(comparassion_result >= 80):
+                                            if not(comparassion_result >= NOS_API.thres):
                                                 NOS_API.set_error_message("Navegação")
                                                 TEST_CREATION_API.write_log_to_file("Doesn't Navigate to right place")
                                                 NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.navigation_error_code \
@@ -1979,7 +1908,7 @@ def runTest():
                                         NOS_API.deinitialize()
                                         
                                         return
-                                result = NOS_API.wait_for_multiple_pictures(["settings_english_language_ref", "settings_english_language_no_signal_ref"], 5, ["[ENGLISH_LANGUAGE_DETECTED]", "[ENGLISH_LANGUAGE_DETECTED]"], [80, 80])
+                                result = NOS_API.wait_for_multiple_pictures(["settings_english_language_ref", "settings_english_language_no_signal_ref"], 5, ["[ENGLISH_LANGUAGE_DETECTED]", "[ENGLISH_LANGUAGE_DETECTED]"], [NOS_API.thres, NOS_API.thres])
                                 if(result == -2):
                                     if (Repeat == 0):
                                         Repeat = Repeat + 1
@@ -2032,7 +1961,7 @@ def runTest():
                                         return
                                 if (result != -1): 
                                     TEST_CREATION_API.send_ir_rc_command("[LANGUAGE_SCREEN]")                    
-                                    result = NOS_API.wait_for_multiple_pictures(["language_screen_ref", "language_screen_no_signal_ref", "language_screen_english_ref", "language_screen_english_no_signal_ref"], 5, ["[LANGUAGE_SCREEN]", "[LANGUAGE_SCREEN]", "[LANGUAGE_SCREEN]", "[LANGUAGE_SCREEN]"], [80, 80, 80, 80])
+                                    result = NOS_API.wait_for_multiple_pictures(["language_screen_ref", "language_screen_no_signal_ref", "language_screen_english_ref", "language_screen_english_no_signal_ref"], 5, ["[LANGUAGE_SCREEN]", "[LANGUAGE_SCREEN]", "[LANGUAGE_SCREEN]", "[LANGUAGE_SCREEN]"], [NOS_API.thres, NOS_API.thres, NOS_API.thres, NOS_API.thres])
                                     if(result == -2):
                                         if (Repeat == 0):
                                             Repeat = Repeat + 1
@@ -2088,7 +2017,7 @@ def runTest():
                                         TEST_CREATION_API.send_ir_rc_command("[CH_1]")
                                         time.sleep(3)
                                         TEST_CREATION_API.send_ir_rc_command("[LANGUAGE_SCREEN]") 
-                                        result = NOS_API.wait_for_multiple_pictures(["language_screen_ref", "language_screen_no_signal_ref", "language_screen_english_ref", "language_screen_english_no_signal_ref"], 5, ["[LANGUAGE_SCREEN]", "[LANGUAGE_SCREEN]", "[LANGUAGE_SCREEN]", "[LANGUAGE_SCREEN]"], [80, 80, 80, 80])
+                                        result = NOS_API.wait_for_multiple_pictures(["language_screen_ref", "language_screen_no_signal_ref", "language_screen_english_ref", "language_screen_english_no_signal_ref"], 5, ["[LANGUAGE_SCREEN]", "[LANGUAGE_SCREEN]", "[LANGUAGE_SCREEN]", "[LANGUAGE_SCREEN]"], [NOS_API.thres, NOS_API.thres, NOS_API.thres, NOS_API.thres])
                                         if(result == -2):
                                             if (Repeat == 0):
                                                 Repeat = Repeat + 1
@@ -2181,7 +2110,7 @@ def runTest():
                                     TEST_CREATION_API.send_ir_rc_command("[SET_PORTUGAL_FROM_LANGUAGE_SCREEN]")
         
                                 TEST_CREATION_API.send_ir_rc_command("[Check_Upgrade]")
-                                result = NOS_API.wait_for_multiple_pictures(["sw_version_ref", "sw_version_black_ref", "sw_version_ref_old", "sw_version_ref_old_1"], 5, ["[SW_VERSION_SCREEN]", "[SW_VERSION_SCREEN]", "[SW_VERSION_SCREEN_Two]", "[SW_VERSION_SCREEN_Two]"], [70, 70, 70, 70])
+                                result = NOS_API.wait_for_multiple_pictures(["sw_version_ref", "sw_version_black_ref", "sw_version_ref_old", "sw_version_ref_old_1"], 5, ["[SW_VERSION_SCREEN]", "[SW_VERSION_SCREEN]", "[SW_VERSION_SCREEN_Two]", "[SW_VERSION_SCREEN_Two]"], [NOS_API.thres_1, NOS_API.thres_1, NOS_API.thres_1, NOS_API.thres_1])
                                 if(result == -2):
                                     if (Repeat == 0):
                                         Repeat = Repeat + 1
@@ -2285,7 +2214,7 @@ def runTest():
                                     TEST_CREATION_API.send_ir_rc_command("[CH_1]")
                                     time.sleep(3)
                                     TEST_CREATION_API.send_ir_rc_command("[Check_Upgrade_Scnd]") 
-                                    result = NOS_API.wait_for_multiple_pictures(["sw_version_ref", "sw_version_black_ref", "sw_version_ref_old"], 5, ["[SW_VERSION_SCREEN]", "[SW_VERSION_SCREEN]", "[SW_VERSION_SCREEN_Two]"], [70, 70, 70])
+                                    result = NOS_API.wait_for_multiple_pictures(["sw_version_ref", "sw_version_black_ref", "sw_version_ref_old"], 5, ["[SW_VERSION_SCREEN]", "[SW_VERSION_SCREEN]", "[SW_VERSION_SCREEN_Two]"], [NOS_API.thres_1, NOS_API.thres_1, NOS_API.thres_1])
                                     if(result == -2):
                                         if (Repeat == 0):
                                             Repeat = Repeat + 1
@@ -2569,7 +2498,7 @@ def runTest():
                                         return
                                 
                                 TEST_CREATION_API.send_ir_rc_command("[SIGNAL_VALUE_NEW_Ch]")
-                                result = NOS_API.wait_for_multiple_pictures(["rede_screen_ref", "rede_screen_no_signal_ref"], 5, ["[REDE_SCREEN]", "[REDE_SCREEN]"], [80, 80])
+                                result = NOS_API.wait_for_multiple_pictures(["rede_screen_ref", "rede_screen_no_signal_ref"], 5, ["[REDE_SCREEN]", "[REDE_SCREEN]"], [NOS_API.thres, NOS_API.thres])
                                 if(result == -2):
                                     if (Repeat == 0):
                                         Repeat = Repeat + 1
@@ -2626,7 +2555,7 @@ def runTest():
                                     time.sleep(2)
                                     TEST_CREATION_API.send_ir_rc_command("[CH_1]")
                                     time.sleep(2)
-                                    result = NOS_API.wait_for_multiple_pictures(["rede_screen_ref", "rede_screen_no_signal_ref"], 5, ["[REDE_SCREEN]", "[REDE_SCREEN]"], [80, 80])
+                                    result = NOS_API.wait_for_multiple_pictures(["rede_screen_ref", "rede_screen_no_signal_ref"], 5, ["[REDE_SCREEN]", "[REDE_SCREEN]"], [NOS_API.thres, NOS_API.thres])
                                     if(result == -2):
                                         if (Repeat == 0):
                                             Repeat = Repeat + 1
@@ -2734,7 +2663,7 @@ def runTest():
                             
                             if (NOS_API.grab_picture("signal_value")):
                                 if not(NOS_API.test_cases_results_info.channel_boot_up_state):   
-                                    right_place_result = NOS_API.wait_for_multiple_pictures(["installation_boot_up_ref", "installation_boot_up_ref_old", "english_installation", "Installation_Check_Signal", "No_Signal_Installation_ref"], 5, ["[Installation_Check_Signal]", "[Installation_Check_Signal]", "[Installation_Check_Signal]", "[Installation_Check_Signal]", "[Installation_Check_Signal]"], [80, 80, 80, 80, 80])       
+                                    right_place_result = NOS_API.wait_for_multiple_pictures(["installation_boot_up_ref", "installation_boot_up_ref1", "installation_boot_up_ref_old", "english_installation", "Installation_Check_Signal", "No_Signal_Installation_ref"], 5, ["[Installation_Check_Signal]", "[Installation_Check_Signal]", "[Installation_Check_Signal]", "[Installation_Check_Signal]", "[Installation_Check_Signal]", "[Installation_Check_Signal]"], [80, 80, 80, 80, 80, 80])       
                                     if(right_place_result == -2):
                                         if (Repeat == 0):
                                             Repeat = Repeat + 1
@@ -3414,7 +3343,7 @@ def runTest():
                                                 time.sleep(4)              
                                                 
                                                 TEST_CREATION_API.send_ir_rc_command("[Check_Upgrade_Inst]")
-                                                result = NOS_API.wait_for_multiple_pictures(["sw_version_ref", "sw_version_black_ref", "sw_version_ref_old"], 5, ["[SW_VERSION_SCREEN]", "[SW_VERSION_SCREEN]", "[SW_VERSION_SCREEN_Two]"], [70, 70, 70])
+                                                result = NOS_API.wait_for_multiple_pictures(["sw_version_ref", "sw_version_black_ref", "sw_version_ref_old"], 5, ["[SW_VERSION_SCREEN]", "[SW_VERSION_SCREEN]", "[SW_VERSION_SCREEN_Two]"], [NOS_API.thres_1, NOS_API.thres_1, NOS_API.thres_1])
                                                 if(result == -2):
                                                     if (Repeat == 0):
                                                         Repeat = Repeat + 1
@@ -3511,7 +3440,7 @@ def runTest():
                                                     TEST_CREATION_API.send_ir_rc_command("[CH_1]")
                                                     time.sleep(3)
                                                     TEST_CREATION_API.send_ir_rc_command("[Check_Upgrade_Scnd]") 
-                                                    result = NOS_API.wait_for_multiple_pictures(["sw_version_ref" , "sw_version_black_ref", "sw_version_ref_old"], 5, ["[SW_VERSION_SCREEN]", "[SW_VERSION_SCREEN]", "[SW_VERSION_SCREEN_Two]"], [70, 70, 70])
+                                                    result = NOS_API.wait_for_multiple_pictures(["sw_version_ref" , "sw_version_black_ref", "sw_version_ref_old"], 5, ["[SW_VERSION_SCREEN]", "[SW_VERSION_SCREEN]", "[SW_VERSION_SCREEN_Two]"], [NOS_API.thres_1, NOS_API.thres_1, NOS_API.thres_1])
                                                     if(result == -2):
                                                         if (Repeat == 0):
                                                             Repeat = Repeat + 1
@@ -3706,7 +3635,7 @@ def runTest():
                                                 ## Navigate to the screen to check frequency and modulation
                                                 TEST_CREATION_API.send_ir_rc_command("[SIGNAL_VALUE_NEW_Ch]")
                                             
-                                                result = NOS_API.wait_for_multiple_pictures(["rede_screen_ref", "rede_screen_no_signal_ref"], 5, ["[REDE_SCREEN]", "[REDE_SCREEN]"], [80, 80])
+                                                result = NOS_API.wait_for_multiple_pictures(["rede_screen_ref", "rede_screen_no_signal_ref"], 5, ["[REDE_SCREEN]", "[REDE_SCREEN]"], [NOS_API.thres, NOS_API.thres])
                                                 if(result == -2):
                                                     if (Repeat == 0):
                                                         Repeat = Repeat + 1
@@ -3810,7 +3739,7 @@ def runTest():
                                                     TEST_CREATION_API.send_ir_rc_command("[CH_1]")
                                                     time.sleep(7)
                                                     TEST_CREATION_API.send_ir_rc_command("[SIGNAL_VALUE_NEW]")
-                                                    result = NOS_API.wait_for_multiple_pictures(["rede_screen_ref"], 5, ["[REDE_SCREEN]"], [80])
+                                                    result = NOS_API.wait_for_multiple_pictures(["rede_screen_ref"], 5, ["[REDE_SCREEN]"], [NOS_API.thres])
                                                     if(result == -2):
                                                         if (Repeat == 0):
                                                             Repeat = Repeat + 1
@@ -3957,7 +3886,7 @@ def runTest():
                                 Repeat = 2
                                 Act = 2
                         else:
-                            NOS_API.display_custom_dialog("Perdeu sinal a meio do teste", 1, ["Continuar"], NOS_API.WAIT_TIME_TO_CLOSE_DIALOG)
+                            #NOS_API.display_custom_dialog("Perdeu sinal a meio do teste", 1, ["Continuar"], NOS_API.WAIT_TIME_TO_CLOSE_DIALOG)
                             TEST_CREATION_API.write_log_to_file("STB lost Signal.Possible Reboot.")
                             NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.reboot_error_code \
                                                     + "; Error message: " + NOS_API.test_cases_results_info.reboot_error_message)
@@ -3996,7 +3925,7 @@ def runTest():
                     if (NOS_API.is_signal_present_on_video_source()):
         
                         TEST_CREATION_API.send_ir_rc_command("[Change_to_FTTH_First]")
-                        result = NOS_API.wait_for_multiple_pictures(["Conectividade_black_ref", "Conectividade_ref"], 5, ["[Conectividade]", "[Conectividade]"], [70, 70])
+                        result = NOS_API.wait_for_multiple_pictures(["Conectividade_black_ref", "Conectividade_ref"], 5, ["[Conectividade]", "[Conectividade]"], [NOS_API.thres_1, NOS_API.thres_1])
                         if(result == -2):
                             if (Repeat == 0):
                                 Repeat = Repeat + 1
@@ -4052,7 +3981,7 @@ def runTest():
                             TEST_CREATION_API.send_ir_rc_command("[CH_1]")
                             time.sleep(3)
                             TEST_CREATION_API.send_ir_rc_command("[Change_to_FTTH_Scnd]")
-                            result = NOS_API.wait_for_multiple_pictures(["Conectividade_black_ref", "Conectividade_ref"], 5, ["[Conectividade]", "[Conectividade]"], [70, 70])
+                            result = NOS_API.wait_for_multiple_pictures(["Conectividade_black_ref", "Conectividade_ref"], 5, ["[Conectividade]", "[Conectividade]"], [NOS_API.thres_1, NOS_API.thres_1])
                             if(result == -2):
                                 if (Repeat == 0):
                                     Repeat = Repeat + 1
@@ -4150,7 +4079,7 @@ def runTest():
                         TEST_CREATION_API.send_ir_rc_command("[OK]")
                         
                         #MAC_SCREEN
-                        result = NOS_API.wait_for_multiple_pictures(["mac_screen_ref", "mac_screen_ref1"], 10, ["[MAC_SCREEN]", "[MAC_SCREEN]"], [70, 70])
+                        result = NOS_API.wait_for_multiple_pictures(["mac_screen_ref", "mac_screen_ref1"], 10, ["[MAC_SCREEN]", "[MAC_SCREEN]"], [NOS_API.thres_1, NOS_API.thres_1])
                         if (result == -2):
                             if (Repeat == 0):
                                 Repeat = Repeat + 1
@@ -4249,7 +4178,7 @@ def runTest():
                             TEST_CREATION_API.send_ir_rc_command("[NAVIGATE_MODEM_DOCSIS]")
                             TEST_CREATION_API.send_ir_rc_command("[OK]")
                             
-                            result = NOS_API.wait_for_multiple_pictures(["mac_screen_ref", "mac_screen_ref1"], 10, ["[MAC_SCREEN]", "[MAC_SCREEN]"], [70, 70])
+                            result = NOS_API.wait_for_multiple_pictures(["mac_screen_ref", "mac_screen_ref1"], 10, ["[MAC_SCREEN]", "[MAC_SCREEN]"], [NOS_API.thres_1, NOS_API.thres_1])
                             if (result == -2):
                                 if (Repeat == 0):
                                     Repeat = Repeat + 1
@@ -4358,7 +4287,7 @@ def runTest():
                             ## Navigate to the Resumo menu
                             TEST_CREATION_API.send_ir_rc_command("[RESUMO_FROM_MODEM_DOCSIS]")
                             
-                            result = NOS_API.wait_for_multiple_pictures(["resumo_ref", "resumo_ref1"], 10, ["[RESUMO]", "[RESUMO]"], [70, 70])
+                            result = NOS_API.wait_for_multiple_pictures(["resumo_ref", "resumo_ref1"], 10, ["[RESUMO]", "[RESUMO]"], [NOS_API.thres_1, NOS_API.thres_1])
                             if (result == -2):
                                 if (Repeat == 0):
                                     Repeat = Repeat + 1
@@ -4415,7 +4344,7 @@ def runTest():
                                 time.sleep(3)
                                 TEST_CREATION_API.send_ir_rc_command("[RESUMO]")
         
-                                result = NOS_API.wait_for_multiple_pictures(["resumo_ref", "resumo_ref1"], 10, ["[RESUMO]", "[RESUMO]"], [70, 70])
+                                result = NOS_API.wait_for_multiple_pictures(["resumo_ref", "resumo_ref1"], 10, ["[RESUMO]", "[RESUMO]"], [NOS_API.thres_1, NOS_API.thres_1])
                                 if (result == -2):
                                     if (Repeat == 0):
                                         Repeat = Repeat + 1
@@ -4575,9 +4504,9 @@ def runTest():
                                                 if(ip_adress == "0.0.0.0"):
                                                     NOS_API.display_dialog("Confirme o cabo Eth e restantes cabos", NOS_API.WAIT_TIME_TO_CLOSE_DIALOG) == "Continuar"
                                                     
-                                                    time.sleep(2)
+                                                    time.sleep(10)
                                                     
-                                                    result = NOS_API.wait_for_multiple_pictures(["resumo_ref", "resumo_ref1"], 10, ["[RESUMO]", "[RESUMO]"], [70, 70])
+                                                    result = NOS_API.wait_for_multiple_pictures(["resumo_ref", "resumo_ref1"], 10, ["[RESUMO]", "[RESUMO]"], [NOS_API.thres_1, NOS_API.thres_1])
                                                     if (result == -2):
                                                         if (Repeat == 0):
                                                             Repeat = Repeat + 1
@@ -4634,7 +4563,7 @@ def runTest():
                                                         time.sleep(3)
                                                         TEST_CREATION_API.send_ir_rc_command("[RESUMO]")
                                 
-                                                        result = NOS_API.wait_for_multiple_pictures(["resumo_ref", "resumo_ref1"], 10, ["[RESUMO]", "[RESUMO]"], [70, 70])
+                                                        result = NOS_API.wait_for_multiple_pictures(["resumo_ref", "resumo_ref1"], 10, ["[RESUMO]", "[RESUMO]"], [NOS_API.thres_1, NOS_API.thres_1])
                                                         if (result == -2):
                                                             if (Repeat == 0):
                                                                 Repeat = Repeat + 1
@@ -4726,7 +4655,7 @@ def runTest():
                                                             return
 
                                                     ## Perform grab picture
-                                                    if (NOS_API.grab_picture("Eth")):
+                                                    if not(NOS_API.grab_picture("Eth")):
                                                         TEST_CREATION_API.write_log_to_file("STB lost Signal.Possible Reboot.")
                                                         NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.reboot_error_code \
                                                                                 + "; Error message: " + NOS_API.test_cases_results_info.reboot_error_message)
@@ -4838,7 +4767,7 @@ def runTest():
                                                     comp_result2 = NOS_API.compare_pictures("sc_info_ref3", "sc_info", "[CAS_ID_Place]")
                                                     comp_result3 = NOS_API.compare_pictures("sc_info_ref4", "sc_info", "[CAS_ID_Place]")
                                                     Flag = 0
-                                                    while (comp_result < TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD and comp_result1 < TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD and comp_result2 < TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD and comp_result3 < TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                                                    while (comp_result < NOS_API.thres and comp_result1 < NOS_API.thres and comp_result2 < NOS_API.thres and comp_result3 < NOS_API.thres):
                                                         TEST_CREATION_API.send_ir_rc_command("[NAVIGATE_DOWN]")
                                                         
                                                         ## Perform grab picture
@@ -4906,7 +4835,7 @@ def runTest():
                                                     video_result4 = NOS_API.compare_pictures("sc_info_ref4", "sc_info", "[SC]")
                                                 
                                                     ## Check is SC not detected
-                                                    if (video_result1 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or video_result2 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or video_result3 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or video_result4 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                                                    if (video_result1 >= NOS_API.thres or video_result2 >= NOS_API.thres or video_result3 >= NOS_API.thres or video_result4 >= NOS_API.thres):
                                                         
                                                         NOS_API.display_dialog("Reinsira o cart\xe3o e de seguida pressiona Continuar", NOS_API.WAIT_TIME_TO_CLOSE_DIALOG) == "Continuar"
                             
@@ -4967,7 +4896,7 @@ def runTest():
                                                         comp_result2 = NOS_API.compare_pictures("sc_info_ref3", "sc_info", "[CAS_ID_Place]")
                                                         comp_result3 = NOS_API.compare_pictures("sc_info_ref4", "sc_info", "[CAS_ID_Place]")
                                                         Flag = 0
-                                                        while (comp_result < TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD and comp_result1 < TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD and comp_result2 < TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD and comp_result3 < TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                                                        while (comp_result < NOS_API.thres and comp_result1 < NOS_API.thres and comp_result2 < NOS_API.thres and comp_result3 < NOS_API.thres):
                                                             TEST_CREATION_API.send_ir_rc_command("[NAVIGATE_DOWN]")
                                                             
                                                             ## Perform grab picture
@@ -5034,7 +4963,7 @@ def runTest():
                                                         video_result4 = NOS_API.compare_pictures("sc_info_ref4", "sc_info", "[SC]")
                                                     
                                                         ## Check is SC not detected
-                                                        if (video_result1 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or video_result2 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or video_result3 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or video_result4 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                                                        if (video_result1 >= NOS_API.thres or video_result2 >= NOS_API.thres or video_result3 >= NOS_API.thres or video_result4 >= NOS_API.thres):
                                                     
                                                             TEST_CREATION_API.write_log_to_file("Smart card is not detected")
                                                             NOS_API.update_test_slot_comment("Error code: " + NOS_API.test_cases_results_info.sc_not_detected_error_code \
@@ -5579,7 +5508,7 @@ def runTest():
                         comparassion_result = NOS_API.compare_pictures("Recording_Active_ref", "Active_Recording", "[Menu_Arquivo]")
                         comparassion_scn_result = NOS_API.compare_pictures("Recording_Active_new_ref", "Active_Recording", "[Menu_Arquivo]")
                         
-                        if(comparassion_result < TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD and comparassion_scn_result < TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD): 
+                        if(comparassion_result < NOS_API.thres and comparassion_scn_result < NOS_API.thres): 
                             if not(NOS_API.grab_picture("Active_Recording_First")):
                                 if (Repeat == 0):
                                     Repeat = Repeat + 1
@@ -5629,13 +5558,13 @@ def runTest():
                                     
                                     return
                             #if not(NOS_API.wait_for_picture(["Recording_Active_ref"], 30, "[Menu_Arquivo]", 0.0)):
-                            compare_result = NOS_API.wait_for_multiple_pictures(["Recording_Active_ref", "Recording_Active_new_ref"], 30, ["[Menu_Arquivo]", "[Menu_Arquivo]"], [80, 80])
+                            compare_result = NOS_API.wait_for_multiple_pictures(["Recording_Active_ref", "Recording_Active_new_ref"], 30, ["[Menu_Arquivo]", "[Menu_Arquivo]"], [NOS_API.thres, NOS_API.thres])
                             if (compare_result == -1 or compare_result == -2):
                                 TEST_CREATION_API.send_ir_rc_command("[EXIT_ZON_BOX_NEW]")
                                 time.sleep(1)
                                 TEST_CREATION_API.send_ir_rc_command("[Check_Record_Active]")
                                 #if not(NOS_API.wait_for_picture(["Recording_Active_ref"], 30, "[Menu_Arquivo]", 0.0)):
-                                compare_result = NOS_API.wait_for_multiple_pictures(["Recording_Active_ref", "Recording_Active_new_ref"], 30, ["[Menu_Arquivo]", "[Menu_Arquivo]"], [80, 80])
+                                compare_result = NOS_API.wait_for_multiple_pictures(["Recording_Active_ref", "Recording_Active_new_ref"], 30, ["[Menu_Arquivo]", "[Menu_Arquivo]"], [NOS_API.thres, NOS_API.thres])
                                 if (compare_result == -1 or compare_result == -2):
                                     if not(NOS_API.grab_picture("Active_Recording_Second")):
                                         if (Repeat == 0):
@@ -5774,7 +5703,7 @@ def runTest():
                                     return
                         video_result = NOS_API.compare_pictures("Recording_Active_ref", "Active_Recording", "[Active_Record]")
                         
-                        if(video_result > TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                        if(video_result > NOS_API.thres):
                             TEST_CREATION_API.send_ir_rc_command("[OK]")
                             if not(NOS_API.grab_picture("Active_Recording_Playing")):
                                 if (Repeat == 0):
@@ -5825,7 +5754,7 @@ def runTest():
                                     
                                     return
                             video_result_1 = NOS_API.compare_pictures("Record_Playing_ref", "Active_Recording_Playing", "[Check_Playing]")
-                            if(video_result_1 > TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                            if(video_result_1 > NOS_API.thres):
                                 TEST_CREATION_API.send_ir_rc_command("[Stop_Playing]")
                                 time.sleep(1)
                                 TEST_CREATION_API.send_ir_rc_command("[OK]")
@@ -5878,7 +5807,7 @@ def runTest():
                                     
                                     return
                             video_result_2 = NOS_API.compare_pictures("Record_Kepp_Watching_ref", "Check_Keep_Watching", "[Keep_Watching_Check]")
-                            if(video_result_2 > TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                            if(video_result_2 > NOS_API.thres):
                                 TEST_CREATION_API.send_ir_rc_command("[Erase_Active_Record]")
                                 time.sleep(1.5)
                             else:
@@ -5950,8 +5879,9 @@ def runTest():
 
                         video_result1 = NOS_API.compare_pictures("Rec_ref", "REC", "[REC]")
                         video_result2 = NOS_API.compare_pictures("Rec1_ref", "REC", "[REC]")
+                        video_result3 = NOS_API.compare_pictures("Rec2_ref", "REC", "[REC]")
         
-                        if not(video_result1 >= 60 or video_result2 >= 60):
+                        if not(video_result1 >= 60 or video_result2 >= 60 or video_result3 >= 60):
                             if not(NOS_API.grab_picture("Check_Full_HDD")):
                                 if (Repeat == 0):
                                     Repeat = Repeat + 1
@@ -6056,10 +5986,10 @@ def runTest():
                                 
                                 check_result = NOS_API.compare_pictures("Check_Serie_Priority_ref", "Check_Serie_Priority", "[Serie_Priority]")
                                 check_result_1 = NOS_API.compare_pictures("Check_Serie_Priority_Sched_ref", "Check_Serie_Priority", "[Serie_Priority]")
-                                if (check_result >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                                if (check_result >= NOS_API.thres):
                                     TEST_CREATION_API.send_ir_rc_command("[Serie_Priority]")
                                 else:
-                                    if(check_result_1 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                                    if(check_result_1 >= NOS_API.thres):
                                         TEST_CREATION_API.send_ir_rc_command("[Serie_Priority_new]")
                                     else:
                                         TEST_CREATION_API.send_ir_rc_command("[OK]")
@@ -6116,7 +6046,7 @@ def runTest():
                                 video_result = NOS_API.compare_pictures("Erase_Right_Menu_ref", "Check_Right_Menu", "[Erase_Right_Menu]")
                                 video_result_1 = NOS_API.compare_pictures("Erase_Right_Menu2_ref", "Check_Right_Menu", "[Erase_Right_Menu_new]")
                                 
-                                if not(video_result >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or video_result_1 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                                if not(video_result >= NOS_API.thres or video_result_1 >= NOS_API.thres):
                                     TEST_CREATION_API.send_ir_rc_command("[EXIT_ZON_BOX_NEW]")
                                     time.sleep(2)
                                     TEST_CREATION_API.send_ir_rc_command("[Erase_HDD]")
@@ -6172,10 +6102,10 @@ def runTest():
                                     
                                     check_result = NOS_API.compare_pictures("Check_Serie_Priority_ref", "Check_Serie_Priority_1", "[Serie_Priority]")
                                     check_result_1 = NOS_API.compare_pictures("Check_Serie_Priority_Sched_ref", "Check_Serie_Priority_1", "[Serie_Priority]")
-                                    if (check_result >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                                    if (check_result >= NOS_API.thres):
                                         TEST_CREATION_API.send_ir_rc_command("[Serie_Priority]")
                                     else:
-                                        if(check_result_1 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                                        if(check_result_1 >= NOS_API.thres):
                                             TEST_CREATION_API.send_ir_rc_command("[Serie_Priority_new]")
                                         else:
                                             TEST_CREATION_API.send_ir_rc_command("[OK]")
@@ -6273,7 +6203,7 @@ def runTest():
                             
                                 TEST_CREATION_API.send_ir_rc_command("[Erase_HDD2]")
                                 
-                                result = NOS_API.wait_for_multiple_pictures(["Erase_Success_ref"],90,["[Erase_Success]"],[80])
+                                result = NOS_API.wait_for_multiple_pictures(["Erase_Success_ref"],90,["[Erase_Success]"],[NOS_API.thres])
                                 
                                 if (result == -2):
                                     if (Repeat == 0):
@@ -6420,8 +6350,9 @@ def runTest():
                             
                             video_result1 = NOS_API.compare_pictures("Rec_ref", "REC_1", "[REC]")
                             video_result2 = NOS_API.compare_pictures("Rec1_ref", "REC_1", "[REC]")
+                            video_result3 = NOS_API.compare_pictures("Rec2_ref", "REC_1", "[REC]")
                         
-                            if not(video_result1 >= 70 or video_result2 >= 70):
+                            if not(video_result1 >= 70 or video_result2 >= 70 or video_result3 >= 70):
                                 if not(NOS_API.grab_picture("Check_Full_HDD")):
                                     if (Repeat == 0):
                                         Repeat = Repeat + 1
@@ -6526,10 +6457,10 @@ def runTest():
                                     
                                     check_result = NOS_API.compare_pictures("Check_Serie_Priority_ref", "Check_Serie_Priority", "[Serie_Priority]")
                                     check_result_1 = NOS_API.compare_pictures("Check_Serie_Priority_Sched_ref", "Check_Serie_Priority", "[Serie_Priority]")
-                                    if (check_result >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                                    if (check_result >= NOS_API.thres):
                                         TEST_CREATION_API.send_ir_rc_command("[Serie_Priority]")
                                     else:
-                                        if(check_result_1 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                                        if(check_result_1 >= NOS_API.thres):
                                             TEST_CREATION_API.send_ir_rc_command("[Serie_Priority_new]")
                                         else:
                                             TEST_CREATION_API.send_ir_rc_command("[OK]")
@@ -6586,7 +6517,7 @@ def runTest():
                                     video_result = NOS_API.compare_pictures("Erase_Right_Menu_ref", "Check_Right_Menu", "[Erase_Right_Menu]")
                                     video_result_1 = NOS_API.compare_pictures("Erase_Right_Menu2_ref", "Check_Right_Menu", "[Erase_Right_Menu_new]")
                                 
-                                    if not(video_result >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or video_result_1 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                                    if not(video_result >= NOS_API.thres or video_result_1 >= NOS_API.thres):
                                         TEST_CREATION_API.send_ir_rc_command("[EXIT_ZON_BOX_NEW]")
                                         time.sleep(2)
                                         TEST_CREATION_API.send_ir_rc_command("[Erase_HDD]")
@@ -6642,10 +6573,10 @@ def runTest():
                                         
                                         check_result = NOS_API.compare_pictures("Check_Serie_Priority_ref", "Check_Serie_Priority_1", "[Serie_Priority]")
                                         check_result_1 = NOS_API.compare_pictures("Check_Serie_Priority_Sched_ref", "Check_Serie_Priority_1", "[Serie_Priority]")
-                                        if (check_result >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                                        if (check_result >= NOS_API.thres):
                                             TEST_CREATION_API.send_ir_rc_command("[Serie_Priority]")
                                         else:
-                                            if(check_result_1 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                                            if(check_result_1 >= NOS_API.thres):
                                                 TEST_CREATION_API.send_ir_rc_command("[Serie_Priority_new]")
                                             else:
                                                 TEST_CREATION_API.send_ir_rc_command("[OK]")
@@ -6702,7 +6633,7 @@ def runTest():
                                         video_result = NOS_API.compare_pictures("Erase_Right_Menu_ref", "Check_Right_Menu_1", "[Erase_Right_Menu]")
                                         video_result_1 = NOS_API.compare_pictures("Erase_Right_Menu2_ref", "Check_Right_Menu_1", "[Erase_Right_Menu_new]")
                                 
-                                        if not(video_result >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or video_result_1 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                                        if not(video_result >= NOS_API.thres or video_result_1 >= NOS_API.thres):
                                             TEST_CREATION_API.write_log_to_file("Couldn't navigate to HDD Menu")
                                             NOS_API.set_error_message("Navegação")
                                             NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.navigation_error_code \
@@ -6743,7 +6674,7 @@ def runTest():
                                 
                                     TEST_CREATION_API.send_ir_rc_command("[Erase_HDD2]")
                                     
-                                    result = NOS_API.wait_for_multiple_pictures(["Erase_Success_ref"],90,["[Erase_Success]"],[80])
+                                    result = NOS_API.wait_for_multiple_pictures(["Erase_Success_ref"],90,["[Erase_Success]"],[NOS_API.thres])
                                     
                                     if (result == -2):
                                         if (Repeat == 0):
@@ -6891,8 +6822,9 @@ def runTest():
                                     
                                     video_result1 = NOS_API.compare_pictures("Rec_ref", "REC_1", "[REC]")
                                     video_result2 = NOS_API.compare_pictures("Rec1_ref", "REC_1", "[REC]")
+                                    video_result3 = NOS_API.compare_pictures("Rec2_ref", "REC_1", "[REC]")
                                 
-                                    if not(video_result1 >= 70 or video_result2 >= 70):
+                                    if not(video_result1 >= 70 or video_result2 >= 70 or video_result3 >= 70):
                                         if not(NOS_API.display_custom_dialog("O Led REC est\xe1 ligado?", 2, ["OK", "NOK"], NOS_API.WAIT_TIME_TO_CLOSE_DIALOG) == "OK"):
                                             NOS_API.test_cases_results_info.recording_started = False
                                             TEST_CREATION_API.write_log_to_file("Recording is not started")
@@ -7175,6 +7107,8 @@ def runTest():
                                     video_result1 = NOS_API.compare_pictures("HDMI_video_ref1", "HDMI_video", "[HALF_SCREEN]")
                                     video_result2 = NOS_API.compare_pictures("HDMI_video_ref2", "HDMI_video", "[HALF_SCREEN]")
                                     video_result3 = NOS_API.compare_pictures("HDMI_video_ref3", "HDMI_video", "[HALF_SCREEN]")
+                                    video_result4 = NOS_API.compare_pictures("HDMI_video_ref4", "HDMI_video", "[HALF_SCREEN]")
+                                    video_result5 = NOS_API.compare_pictures("HDMI_video_ref5", "HDMI_video", "[HALF_SCREEN]")
                             
                                 except:
                                     i = i + 1
@@ -7182,7 +7116,8 @@ def runTest():
                                 
                                 ## Check video analysis results and update comments
                                 if (video_result1 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or video_result2 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or \
-                                    video_result3 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                                    video_result3 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or video_result4 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or \
+                                    video_result5 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
                                     i = 0
                                     if (analysed_video):            
                                         HDMI_VIDEO_Result = True
@@ -7946,12 +7881,13 @@ def runTest():
                                                     return
                                             ## Compare grabbed and expected image and get result of comparison
                                             video_result = NOS_API.compare_pictures("SCART_video_ref", "SCART_video", "[HALF_SCREEN_576p]")
+                                            video_result_1 = NOS_API.compare_pictures("SCART_video_ref1", "SCART_video", "[HALF_SCREEN_576p]")
                                         except:
                                             i = i + 1
                                             continue
                                 
                                         ## Check video analysis results and update comments
-                                        if (video_result >= NOS_API.DEFAULT_CVBS_VIDEO_THRESHOLD):
+                                        if (video_result >= NOS_API.DEFAULT_CVBS_VIDEO_THRESHOLD or video_result_1 >= NOS_API.DEFAULT_CVBS_VIDEO_THRESHOLD):
                                             ## Set test result to PASS
                                             test_result_SCART_video = True
                                             break
@@ -8851,7 +8787,7 @@ def runTest():
                                                     report_file)
                                                 
                                                 return
-                                            compare_result = NOS_API.wait_for_multiple_pictures(["Recording_Active_ref", "Recording_Active_new_ref"], 30, ["[Menu_Arquivo]", "[Menu_Arquivo]"], [80, 80])
+                                            compare_result = NOS_API.wait_for_multiple_pictures(["Recording_Active_ref", "Recording_Active_new_ref"], 30, ["[Menu_Arquivo]", "[Menu_Arquivo]"], [NOS_API.thres, NOS_API.thres])
                                             if (compare_result == -1 or compare_result == -2):
                                                 if(TEST_CREATION_API.compare_pictures("No_Content_ref", "HDD_menu", "[No_Content]") or TEST_CREATION_API.compare_pictures("No_content_ref2", "HDD_menu", "[No_Content]")):
                                                     NOS_API.test_cases_results_info.recording_started = False
@@ -9200,6 +9136,7 @@ def runTest():
         
                                         if (pqm_analyse.black_screen_detected == TEST_CREATION_API.AlgorythmResult.DETECTED):
                                             pqm_analyse_check = False
+                                            TEST_CREATION_API.write_log_to_file("Fail on PQM Analyses. Black Screen was detected")
                                             NOS_API.update_test_slot_comment("Error code: " + NOS_API.test_cases_results_info.hdmi_720p_image_absence_error_code \
                                                     + "; Error message: " + NOS_API.test_cases_results_info.hdmi_720p_image_absence_error_message)
                                             NOS_API.set_error_message("HDD")       
@@ -9208,6 +9145,7 @@ def runTest():
         
                                         if (pqm_analyse.blocking_detected == TEST_CREATION_API.AlgorythmResult.DETECTED):
                                             pqm_analyse_check = False
+                                            TEST_CREATION_API.write_log_to_file("Fail on PQM Analyses. Blocking was detected")
                                             NOS_API.update_test_slot_comment("Error code: " + NOS_API.test_cases_results_info.hdmi_720p_blocking_error_code \
                                                     + "; Error message: " + NOS_API.test_cases_results_info.hdmi_720p_blocking_error_message)
                                             NOS_API.set_error_message("HDD")
@@ -9223,6 +9161,7 @@ def runTest():
         
                                         if (pqm_analyse.freezing_detected == TEST_CREATION_API.AlgorythmResult.DETECTED):
                                             pqm_analyse_check = False
+                                            TEST_CREATION_API.write_log_to_file("Fail on PQM Analyses. Frezzing was detected")
                                             NOS_API.update_test_slot_comment("Error code: " + NOS_API.test_cases_results_info.hdmi_720p_image_freezing_error_code \
                                                     + "; Error message: " + NOS_API.test_cases_results_info.hdmi_720p_image_freezing_error_message)
                                             NOS_API.set_error_message("HDD")
@@ -9236,33 +9175,38 @@ def runTest():
                                             else:
                                                 error_messages = error_messages + " " + NOS_API.test_cases_results_info.hdmi_720p_image_freezing_error_message
                                         
-                                        if not(pqm_analyse_check):  
-                                            TEST_CREATION_API.write_log_to_file("Fail on PQM Analyses of recorded content.")
-                                            NOS_API.set_error_message("HDD")
-                                            NOS_API.deinitialize()
+                                        if not(pqm_analyse_check): 
                                             NOS_API.add_test_case_result_to_file_report(
-                                                    test_result,
-                                                    "- - - - - - - - - - - - - - - - - - - -",
-                                                    "- - - - - - - - - - - - - - - - - - - -",
-                                                    error_codes,
-                                                    error_messages)
-                                        
-                                            end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                                                        test_result,
+                                                        "- - - - - - - - - - - - - - - - - - - -",
+                                                        "- - - - - - - - - - - - - - - - - - - -",
+                                                        error_codes,
+                                                        error_messages)
+                            
+                                            end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S') 
                                             report_file = NOS_API.create_test_case_log_file(
-                                                        NOS_API.test_cases_results_info.s_n_using_barcode,
-                                                        NOS_API.test_cases_results_info.nos_sap_number,
-                                                        NOS_API.test_cases_results_info.cas_id_using_barcode,
-                                                        NOS_API.test_cases_results_info.mac_using_barcode,
-                                                        end_time)
+                                                            NOS_API.test_cases_results_info.s_n_using_barcode,
+                                                            NOS_API.test_cases_results_info.nos_sap_number,
+                                                            NOS_API.test_cases_results_info.cas_id_using_barcode,
+                                                            NOS_API.test_cases_results_info.mac_using_barcode,
+                                                            end_time)
+                                        
                                             NOS_API.upload_file_report(report_file)
-                                            
+                                            NOS_API.test_cases_results_info.isTestOK = False
+                                                                    
                                             NOS_API.send_report_over_mqtt_test_plan(
-                                                test_result,
-                                                end_time,
-                                                error_codes,
-                                                report_file)
+                                                    test_result,
+                                                    end_time,
+                                                    error_codes,
+                                                    report_file)
+                                                    
+                                            ## Update test result
+                                            TEST_CREATION_API.update_test_result(test_result)
                                             
-                                            return
+                                            ## Return DUT to initial state and de-initialize grabber device
+                                            NOS_API.deinitialize()
+                                            
+                                            return 
         
                                         ## Check if video is playing (check if video is not freezed)
                                         if not(NOS_API.is_video_playing()):
@@ -9329,9 +9273,11 @@ def runTest():
                                                 
                                             ## Compare grabbed and expected image and get result of comparison
                                             video_result = NOS_API.compare_pictures("recorded_content_ref", "recorded_content", "[HALF_SCREEN]")
+                                            video_result_1 = NOS_API.compare_pictures("recorded_content_ref1", "recorded_content", "[HALF_SCREEN]")
+                                            video_result_2 = NOS_API.compare_pictures("recorded_content_ref2", "recorded_content", "[HALF_SCREEN]")
         
                                             ## Check video analysis results and update comments
-                                            if (video_result >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                                            if (video_result >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or video_result_1 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or video_result_2 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
                                                 if (analysed_video): 
                                                     ## Set test result to PASS           
                                                     VIDEO_RECORD_Result = True
@@ -9524,9 +9470,9 @@ def runTest():
                                     
                                                     return
                                                 NOS_API.display_custom_dialog("Pressione no bot\xe3o 'Power'", 1, ["Continuar"], NOS_API.WAIT_TIME_TO_CLOSE_DIALOG) 
-                                                if not(NOS_API.wait_for_no_signal_present(5)):
+                                                if not(NOS_API.wait_for_no_signal_present(20)):
                                                     NOS_API.display_custom_dialog("Pressione no bot\xe3o 'Power'", 1, ["Continuar"], NOS_API.WAIT_TIME_TO_CLOSE_DIALOG) 
-                                                    if not(NOS_API.wait_for_no_signal_present(5)):
+                                                    if not(NOS_API.wait_for_no_signal_present(20)):
                                                         TEST_CREATION_API.write_log_to_file("Power button NOK")
                                                         NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.power_button_nok_error_code \
                                                                                         + "; Error message: " + NOS_API.test_cases_results_info.power_button_nok_error_message)
@@ -9693,7 +9639,7 @@ def runTest():
                                                     video_result = NOS_API.compare_pictures("Factory_Reset_ref", "Factory_Reset", "[Factory_Reset]")
                                                     video_result_1 = NOS_API.compare_pictures("Factory_Reset_Black_ref", "Factory_Reset", "[Factory_Reset]")
                                                     
-                                                    if not(video_result >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or video_result_1 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                                                    if not(video_result >= NOS_API.thres or video_result_1 >= NOS_API.thres):
                                                         TEST_CREATION_API.send_ir_rc_command("[EXIT_ZON_BOX_NEW]")
                                                         TEST_CREATION_API.send_ir_rc_command("[CH_1]")
                                                         TEST_CREATION_API.send_ir_rc_command("[Factory_Reset_Slow]")
@@ -9757,7 +9703,7 @@ def runTest():
                                                             video_result_3 = 0
                                                             video_result_4 = NOS_API.compare_pictures("Factory_Reset_1080_ref", "Factory_Reset_1", "[Factory_Reset_1080]")
                                                             
-                                                        if not(video_result_2 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or video_result_3 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD or video_result_4 >= TEST_CREATION_API.DEFAULT_HDMI_VIDEO_THRESHOLD):
+                                                        if not(video_result_2 >= NOS_API.thres or video_result_3 >= NOS_API.thres or video_result_4 >= NOS_API.thres):
                                                             TEST_CREATION_API.write_log_to_file("Navigation to resumo screen failed")
                                                             NOS_API.set_error_message("Navegação")
                                                             NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.navigation_error_code \
