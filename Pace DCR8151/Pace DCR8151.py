@@ -4767,7 +4767,10 @@ def runTest():
                                                     comp_result2 = NOS_API.compare_pictures("sc_info_ref3", "sc_info", "[CAS_ID_Place]")
                                                     comp_result3 = NOS_API.compare_pictures("sc_info_ref4", "sc_info", "[CAS_ID_Place]")
                                                     Flag = 0
-                                                    while (comp_result < NOS_API.thres and comp_result1 < NOS_API.thres and comp_result2 < NOS_API.thres and comp_result3 < NOS_API.thres):
+                                                    initial_time = time.localtime()
+                                                    current_time = 0
+                                                    timeout_time = 60
+                                                    while (comp_result < NOS_API.thres and comp_result1 < NOS_API.thres and comp_result2 < NOS_API.thres and comp_result3 < NOS_API.thres and current_time < timeout_time):
                                                         TEST_CREATION_API.send_ir_rc_command("[NAVIGATE_DOWN]")
                                                         
                                                         ## Perform grab picture
@@ -4825,6 +4828,49 @@ def runTest():
                                                         comp_result1 = NOS_API.compare_pictures("sc_info_ref2", "sc_info", "[CAS_ID_Place]")
                                                         comp_result2 = NOS_API.compare_pictures("sc_info_ref3", "sc_info", "[CAS_ID_Place]")
                                                         comp_result3 = NOS_API.compare_pictures("sc_info_ref4", "sc_info", "[CAS_ID_Place]")
+
+                                                        # Get current time and check is testing finished
+                                                        current_time = (time.mktime(time.localtime()) - time.mktime(initial_time)) 
+                                                    TEST_CREATION_API.write_log_to_file("current: " + str(current_time) + "\ntimeout: " + str(timeout_time))
+                                                    if current_time > timeout_time:
+                                                        TEST_CREATION_API.write_log_to_file("Navigation to resumo screen failed")
+                                                        
+                                                        NOS_API.set_error_message("Navegação")
+                                                        
+                                                        NOS_API.update_test_slot_comment("Error code = " + NOS_API.test_cases_results_info.navigation_error_code \
+                                                                                            + "; Error message: " + NOS_API.test_cases_results_info.navigation_error_message) 
+                                                        error_codes = NOS_API.test_cases_results_info.navigation_error_code
+                                                        error_messages = NOS_API.test_cases_results_info.navigation_error_message
+                                                        NOS_API.add_test_case_result_to_file_report(
+                                                                test_result,
+                                                                "- - - - " + str(tx_value) + " " + str(rx_value) + " " + str(downloadstream_snr_value) + " - - - - - " + str(cas_id_number) + " " + str(sw_version) + " - " + str(sc_number) + " - - - -",
+                                                                "- - - - <52 >-10<10 >=34 - - - - - - - - - - - - -",
+                                                                error_codes,
+                                                                error_messages)
+                                                    
+                                                        end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                                                        report_file = ""    
+                                                        
+                                                        report_file = NOS_API.create_test_case_log_file(
+                                                                        NOS_API.test_cases_results_info.s_n_using_barcode,
+                                                                        NOS_API.test_cases_results_info.nos_sap_number,
+                                                                        NOS_API.test_cases_results_info.cas_id_using_barcode,
+                                                                        NOS_API.test_cases_results_info.mac_using_barcode,
+                                                                        end_time)
+                                                        NOS_API.upload_file_report(report_file)
+                                                        
+                                                        NOS_API.send_report_over_mqtt_test_plan(
+                                                                test_result,
+                                                                end_time,
+                                                                error_codes,
+                                                                report_file)
+                            
+                                                        ## Update test result
+                                                        TEST_CREATION_API.update_test_result(test_result)
+                            
+                                                        ## Return DUT to initial state and de-initialize grabber device
+                                                        NOS_API.deinitialize()
+                                                        return
                                                     
                                                     if (Flag == 1):
                                                         continue
